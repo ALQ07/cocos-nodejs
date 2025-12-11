@@ -55,7 +55,8 @@ export class Room {
                 }
             })),
             bullets: [],
-            nextBulletId: 1
+            nextBulletId: 1,
+            seed: 1
         }
 
         for (const player of this.players) {

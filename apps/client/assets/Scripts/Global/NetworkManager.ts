@@ -1,5 +1,6 @@
 import Singleton from "../Base/Singleton";
 import { IModel } from "../Common";
+import { delay } from "../Utils";
 
 interface Iitem {
     cb: Function,
@@ -17,6 +18,10 @@ export class NetworkManager extends Singleton {
     port = 9876;
     ws: WebSocket;
 
+    // 断线重连相关属性
+    private reconnectAttempts: number = 0; //重连次数
+    private isReconnecting: boolean = false; // 是否正在重连
+
     private map: Map<string, Array<Iitem>> = new Map();
 
     public static get Instance() {
@@ -33,6 +38,8 @@ export class NetworkManager extends Singleton {
             this.ws = new WebSocket(`ws://localhost:${this.port}`);
             this.ws.onopen = () => {
                 this.isConnected = true;
+                this.reconnectAttempts = 0; // 重置重连次数
+                this.isReconnecting = false; // 重置重连状态
                 resolve(true);
             };
             this.ws.onmessage = (event) => {
@@ -49,12 +56,45 @@ export class NetworkManager extends Singleton {
 
                 reject(false);
             };
-            this.ws.onclose = () => {
+            this.ws.onclose = async () => {
                 this.isConnected = false;
-
+                // 如果不是手动关闭，则启动重连
+                if(!this.isReconnecting){
+                    await this.autoReconnect();
+                }
                 reject(false);
             };
         })
+    }
+
+    /**自动重连 */
+    private async autoReconnect(){
+        if(this.isReconnecting) return;
+
+        this.isReconnecting = true;
+        this.reconnectAttempts++;
+        console.log(`第${this.reconnectAttempts}次自动重连`)
+        // 等待1s后重连
+        await delay(1000);
+
+        try {
+            await this.connet();
+            console.log('自动重连成功')
+        } catch (error) {
+            console.log(`第${this.reconnectAttempts}次重连失败，继续尝试...`, error)
+            this.isReconnecting = false;
+            await this.autoReconnect();
+        }
+    }
+
+    /**手动重连 */
+    public async reconnect(){
+        this.isReconnecting = false;
+        this.reconnectAttempts = 0;
+        if(this.ws){
+            this.ws.close();
+        }
+        return await this.connet();
     }
 
     callApi<T extends keyof IModel['api']>(name: T, data: IModel['api'][T]['req']): Promise<ICallApiRet<IModel['api'][T]['res']>> {

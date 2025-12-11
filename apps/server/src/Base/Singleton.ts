@@ -8,5 +8,5 @@ export default class Singleton {
     return this._instance;
   }
 
-  protected constructor() {}
+  protected constructor() { }
 }

@@ -9,7 +9,7 @@ import { NetworkManager } from '../Global/NetworkManager';
 import { ObjectPoolManager } from '../Global/ObjectPoolManager';
 import { ResourceManager } from '../Global/ResourceManager';
 import { JoyStickManager } from '../UI/JoyStickManager';
-import { deepClone, delay } from '../Utils';
+import { deepClone } from '../Utils';
 const { ccclass, property } = _decorator;
 
 @ccclass('BattleManager')
@@ -20,10 +20,9 @@ export class BattleManager extends Component {
     private pendingMsg: IMsgClientSync[] = [];
 
     async connetServer() {
-        if (!(await NetworkManager.Instance.connet().catch(() => false))) {
-            await delay(1000);
-            await this.connetServer();
-        }
+        await NetworkManager.Instance.connet().catch(()=>{
+            console.log('连接失败，ws将自动重连');
+        })
     }
 
     async onLoad() {
@@ -106,7 +105,7 @@ export class BattleManager extends Component {
             const { id, type } = data;
             let actorManager = DataManager.Instance.actorMap.get(id);
             if (!actorManager) {
-                const prefab = DataManager.Instance.prefabMap.get(type)
+                const prefab = DataManager.Instance.prefabMap.get(type);
                 const actor = instantiate(prefab);
                 actor.parent = this.stage;
                 actorManager = actor.addComponent(ActorManager);
@@ -123,7 +122,7 @@ export class BattleManager extends Component {
             let bulletManager = DataManager.Instance.bulletMap.get(id);
             if (!bulletManager) {
                 // const prefab = DataManager.Instance.prefabMap.get(type)
-                const bullet = ObjectPoolManager.Instance.get(type)
+                const bullet = ObjectPoolManager.Instance.get(type);
                 // bullet.parent = this.stage;
                 bulletManager = bullet.getComponent(BulletManager) || bullet.addComponent(BulletManager);
                 DataManager.Instance.bulletMap.set(id, bulletManager);

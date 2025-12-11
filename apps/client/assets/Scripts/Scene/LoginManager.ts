@@ -14,8 +14,10 @@ export class LoginManager extends Component {
         director.preloadScene(SceneEnum.Hall)
     }
 
-    async start() {
-        await NetworkManager.Instance.connet()
+    start() {
+        NetworkManager.Instance.connet().catch(()=>{
+            console.log('初始连接失败，ws将自动重连');
+        })
     }
 
     async handleClick() {
@@ -29,7 +31,6 @@ export class LoginManager extends Component {
             nickname
         })
         if (!success) return console.log(error)
-        DataManager.Instance
         DataManager.Instance.myPlayerId = res.player.id
         console.log("res:", res)
         director.loadScene(SceneEnum.Hall)
