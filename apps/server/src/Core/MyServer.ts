@@ -18,6 +18,7 @@ export class MyServer extends EventEmitter {
         return new Promise((resolve, reject) => {
             this.wss.on("listening", () => { resolve(true) });
             this.wss.on("connection", (ws: WebSocket) => {
+                // 连接成功后，创建一个连接对象,每一个连接会有一个新的ws对象
                 const connection = new Connection(this, ws)
                 this.connections.add(connection)
                 this.emit("connection", connection)
