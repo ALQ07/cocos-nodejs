@@ -6,6 +6,7 @@ import RoomManager from "./RoomManager"
 
 export class Room {
     id: number
+    hostUid: number
     players: Set<Player> = new Set()
 
     pendingInput: IClientInput[] = []
@@ -13,8 +14,9 @@ export class Room {
     lastPlayerFrameIdMap: Map<number, number> = new Map()
 
 
-    constructor(rid: number) {
+    constructor(rid: number, uid: number) {
         this.id = rid
+        this.hostUid = uid
     }
 
     join(uid: number) {

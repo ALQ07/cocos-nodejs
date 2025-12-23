@@ -12,8 +12,8 @@ export default class RoomManager extends Singleton {
     rooms: Set<Room> = new Set()
     idMapRoom: Map<number, Room> = new Map()
 
-    createRoom() {
-        const room = new Room(this.nextRoomId++)
+    createRoom(uid: number) {
+        const room = new Room(this.nextRoomId++, uid)
         this.rooms.add(room)
         this.idMapRoom.set(room.id, room)
         return room
@@ -66,8 +66,8 @@ export default class RoomManager extends Singleton {
         }
     }
 
-    getRoomView({ id, players }: Room) {
-        return { id, players: PlayerManager.Instance.getPlayersView(players) }
+    getRoomView({ id, players, hostUid }: Room) {
+        return { id, players: PlayerManager.Instance.getPlayersView(players), hostUid }
     }
 
     getRoomsView(rooms: Set<Room> = this.rooms) {

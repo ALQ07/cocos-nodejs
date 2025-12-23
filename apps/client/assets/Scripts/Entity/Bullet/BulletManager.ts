@@ -70,9 +70,11 @@ export class BulletManager extends EntityManager {
 
     renderDire(data: IBullet) {
         const { id, type, position, direction } = data;
-        const side = Math.sqrt(direction.x * direction.x + direction.y * direction.y);
-        const rad = direction.x > 0 ? Math.asin(direction.y / side) : Math.asin(-direction.y / side);
-        const angle = direction.x > 0 ? rad2Angle(rad) : rad2Angle(rad) + 180;
+        // const side = Math.sqrt(direction.x * direction.x + direction.y * direction.y);
+        const rad = Math.atan2(direction.y, direction.x);
+        const angle = rad2Angle(rad);
+        // const rad = direction.x > 0 ? Math.asin(direction.y / side) : Math.asin(-direction.y / side);
+        // const angle = direction.x > 0 ? rad2Angle(rad) : rad2Angle(rad) + 180;
         this.node.setRotationFromEuler(new Vec3(0, 0, angle));
     }
 

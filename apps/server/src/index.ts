@@ -44,7 +44,7 @@ server.setApi(ApiMsgEnum.ApiPlayerList, (connection: Connection, data: IApiPlaye
 
 server.setApi(ApiMsgEnum.ApiRoomCreate, (connection: Connection, data: IApiRoomCreateReq): IApiRoomCreateRes => {
     if (connection.playerId) {
-        const newRoom = RoomManager.Instance.createRoom()
+        const newRoom = RoomManager.Instance.createRoom(connection.playerId)
         const room = RoomManager.Instance.joinRoom(newRoom.id, connection.playerId)
         if (room) {
             RoomManager.Instance.syncRooms()

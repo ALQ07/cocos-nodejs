@@ -8,9 +8,10 @@ const { ccclass, property } = _decorator;
 export class RoomManager extends Component {
     id: number
 
-    init({ id, players }: IRoom) {
+    init({ id, players, hostUid }: IRoom) {
+        const host = players.find(player => player.id === hostUid);
         this.id = id
-        this.node.getComponent(Label).string = `房间ID：${id}`
+        this.node.getComponent(Label).string = `${host?.nickname}的房间`
         this.node.active = true;
     }
 

@@ -89,7 +89,7 @@ export class ActorManager extends EntityManager {
 
     renderDire(data: IActor) {
         const { id, type, position, direction } = data;
-        this.node.position = new Vec3(position.x, position.y, 0);
+        // this.node.position = new Vec3(position.x, position.y, 0);
         this.node.setScale(v3(direction.x > 0 ? 1 : -1, 1, 1));
         this.hp.node.setScale(v3(direction.x > 0 ? 1 : -1, 1, 1));
         // 方案一：使用 Math.asin 计算角度

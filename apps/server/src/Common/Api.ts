@@ -7,6 +7,7 @@ export interface IPlayer {
 export interface IRoom {
     id: number
     players: IPlayer[]
+    hostUid: number
 }
 
 
