@@ -6,12 +6,12 @@ import DataManager from '../../Global/DataManager';
 import EventManager from '../../Global/EventManager';
 import { ObjectPoolManager } from '../../Global/ObjectPoolManager';
 import { rad2Angle } from '../../Utils';
-import { ExplosionManager } from '../Explosion/ExplosionManager';
+import { ExplosionEntity } from '../Explosion/ExplosionEntity';
 import { BulletStateMachine } from './BulletStateMachine';
 const { ccclass, property } = _decorator;
 
-@ccclass('BulletManager')
-export class BulletManager extends EntityManager {
+@ccclass('BulletEntity')
+export class BulletEntity extends EntityManager {
 
     type: EntityTypeEnum;
     id: number;
@@ -38,7 +38,7 @@ export class BulletManager extends EntityManager {
         // const prefab = DataManager.Instance.prefabMap.get(EntityTypeEnum.Explosion);
         const explosion = ObjectPoolManager.Instance.get(EntityTypeEnum.Explosion);
         // explosion.parent = DataManager.Instance.stage;
-        const explosionManager = explosion.getComponent(ExplosionManager) || explosion.addComponent(ExplosionManager);
+        const explosionManager = explosion.getComponent(ExplosionEntity) || explosion.addComponent(ExplosionEntity);
         explosionManager.init(EntityTypeEnum.Explosion, pos);
         ObjectPoolManager.Instance.ret(this.node);
         EventManager.Instance.off(EventEnum.ExplosionBorn, this.handleExplosionBorn, this);

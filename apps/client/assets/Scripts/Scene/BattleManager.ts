@@ -1,7 +1,7 @@
 import { _decorator, Component, instantiate, Node, Prefab, SpriteFrame } from 'cc';
 import { ApiMsgEnum, EntityTypeEnum, IClientInput, IMsgClientSync, IMsgServerSync, InputTypeEnum } from '../Common';
-import { ActorManager } from '../Entity/Actor/ActorManager';
-import { BulletManager } from '../Entity/Bullet/BulletManager';
+import { ActorEntity } from '../Entity/Actor/ActorEntity';
+import { BulletEntity } from '../Entity/Bullet/BulletEntity';
 import { EventEnum, PrefabPathEnum, TexturePathEnum } from '../Enum';
 import DataManager from '../Global/DataManager';
 import EventManager from '../Global/EventManager';
@@ -20,7 +20,7 @@ export class BattleManager extends Component {
     private pendingMsg: IMsgClientSync[] = [];
 
     async connetServer() {
-        await NetworkManager.Instance.connet().catch(()=>{
+        await NetworkManager.Instance.connet().catch(() => {
             console.log('连接失败，ws将自动重连');
         })
     }
@@ -88,9 +88,9 @@ export class BattleManager extends Component {
     tickActor(dt: number) {
         for (let data of DataManager.Instance.state.actors) {
             const { id, type } = data;
-            let actorManager = DataManager.Instance.actorMap.get(id);
-            if (actorManager) {
-                actorManager.tick(dt);
+            let actorEntity = DataManager.Instance.actorMap.get(id);
+            if (actorEntity) {
+                actorEntity.tick(dt);
             }
         }
     }
@@ -103,16 +103,16 @@ export class BattleManager extends Component {
     renderActor() {
         for (let data of DataManager.Instance.state.actors) {
             const { id, type } = data;
-            let actorManager = DataManager.Instance.actorMap.get(id);
-            if (!actorManager) {
+            let actorEntity = DataManager.Instance.actorMap.get(id);
+            if (!actorEntity) {
                 const prefab = DataManager.Instance.prefabMap.get(type);
-                const actor = instantiate(prefab);
-                actor.parent = this.stage;
-                actorManager = actor.addComponent(ActorManager);
-                DataManager.Instance.actorMap.set(id, actorManager);
-                actorManager.init(data);
+                const actorNode = instantiate(prefab);
+                actorNode.parent = this.stage;
+                actorEntity = actorNode.addComponent(ActorEntity);
+                DataManager.Instance.actorMap.set(id, actorEntity);
+                actorEntity.init(data);
             }
-            actorManager.render(data);
+            actorEntity.render(data);
         }
     }
 
@@ -124,7 +124,7 @@ export class BattleManager extends Component {
                 // const prefab = DataManager.Instance.prefabMap.get(type)
                 const bullet = ObjectPoolManager.Instance.get(type);
                 // bullet.parent = this.stage;
-                bulletManager = bullet.getComponent(BulletManager) || bullet.addComponent(BulletManager);
+                bulletManager = bullet.getComponent(BulletEntity) || bullet.addComponent(BulletEntity);
                 DataManager.Instance.bulletMap.set(id, bulletManager);
                 bulletManager.init(data);
             }

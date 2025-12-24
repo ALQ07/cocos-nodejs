@@ -7,8 +7,8 @@ import EventManager from '../../Global/EventManager';
 import { WeaponStateMachine } from './WeaponStateMachine';
 const { ccclass, property } = _decorator;
 
-@ccclass('WeaponManager')
-export class WeaponManager extends EntityManager {
+@ccclass('WeaponEntity')
+export class WeaponEntity extends EntityManager {
     private body: Node = null;
     private anchor: Node = null;
     private point: Node = null;

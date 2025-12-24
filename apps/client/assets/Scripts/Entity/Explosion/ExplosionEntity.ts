@@ -5,8 +5,8 @@ import { EntityStateEnum } from '../../Enum';
 import { ExplosionStateMachine } from './ExplosionStateMachine';
 const { ccclass, property } = _decorator;
 
-@ccclass('ExplosionManager')
-export class ExplosionManager extends EntityManager {
+@ccclass('ExplosionEntity')
+export class ExplosionEntity extends EntityManager {
 
     type: EntityTypeEnum;
     id: number;

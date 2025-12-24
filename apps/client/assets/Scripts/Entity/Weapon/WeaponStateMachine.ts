@@ -3,7 +3,7 @@ import State from "../../Base/State";
 import StateMachine, { getInitParamsTrigger } from "../../Base/StateMachine";
 import { EntityTypeEnum } from "../../Common";
 import { EntityStateEnum, ParamsNameEnum } from "../../Enum";
-import { WeaponManager } from "./WeaponManager";
+import { WeaponEntity } from "./WeaponEntity";
 const { ccclass } = _decorator;
 
 @ccclass("WeaponStateMachine")
@@ -29,7 +29,7 @@ export class WeaponStateMachine extends StateMachine {
     initAnimationEvent() {
         this.animationComponent.on(Animation.EventType.FINISHED, () => {
             if (this.animationComponent.defaultClip.name.includes(EntityStateEnum.Attack)) {
-                this.node.parent.getComponent(WeaponManager).state = EntityStateEnum.Idle;
+                this.node.parent.getComponent(WeaponEntity).state = EntityStateEnum.Idle;
             }
         }, this);
     }

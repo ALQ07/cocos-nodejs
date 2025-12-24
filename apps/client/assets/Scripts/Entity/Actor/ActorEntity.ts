@@ -5,13 +5,13 @@ import { EntityStateEnum, EventEnum } from '../../Enum';
 import DataManager from '../../Global/DataManager';
 import EventManager from '../../Global/EventManager';
 import { rad2Angle } from '../../Utils';
-import { WeaponManager } from '../Weapon/WeaponManager';
+import { WeaponEntity } from '../Weapon/WeaponEntity';
 import { ActorStateMachine } from './ActorStateMachine';
 const { ccclass, property } = _decorator;
 
-@ccclass('ActorManager')
-export class ActorManager extends EntityManager {
-    private wm: WeaponManager = null;
+@ccclass('ActorEntity')
+export class ActorEntity extends EntityManager {
+    private wm: WeaponEntity = null;
     private targetPos: Vec3
     private tw: Tween<unknown>
 
@@ -56,7 +56,7 @@ export class ActorManager extends EntityManager {
         this.bulletType = EntityTypeEnum.Bullet2;
         const weapon = instantiate(DataManager.Instance.prefabMap.get(EntityTypeEnum.Weapon1));
         weapon.parent = this.node;
-        this.wm = weapon.addComponent(WeaponManager);
+        this.wm = weapon.addComponent(WeaponEntity);
         this.wm.init(data);
     }
 
