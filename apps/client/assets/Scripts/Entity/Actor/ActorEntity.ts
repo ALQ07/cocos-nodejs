@@ -2,6 +2,7 @@ import { _decorator, instantiate, ProgressBar, tween, Tween, v3, Vec3 } from 'cc
 import { EntityManager } from '../../Base/EntityManager';
 import { EntityTypeEnum, IActor, InputTypeEnum } from '../../Common';
 import { EntityStateEnum, EventEnum } from '../../Enum';
+import { MoveComponent } from '../../Fighting/UnitComponents/MoveComponent';
 import DataManager from '../../Global/DataManager';
 import EventManager from '../../Global/EventManager';
 import { rad2Angle } from '../../Utils';
@@ -14,10 +15,15 @@ export class ActorEntity extends EntityManager {
     private wm: WeaponEntity = null;
     private targetPos: Vec3
     private tw: Tween<unknown>
+    private _MoveComponent: MoveComponent = null;
 
     bulletType: EntityTypeEnum;
     id: number;
     hp: ProgressBar;
+
+    public get MoveComponent() {
+        return this._MoveComponent;
+    }
 
     start() {
 
@@ -49,6 +55,7 @@ export class ActorEntity extends EntityManager {
         this.id = data.id;
         this.fsm = this.node.addComponent(ActorStateMachine);
         this.hp = this.node.getComponentInChildren(ProgressBar);
+        this._MoveComponent = new MoveComponent(this);
         this.fsm.init(data.type);
         this.state = EntityStateEnum.Idle;
         this.node.active = false;
