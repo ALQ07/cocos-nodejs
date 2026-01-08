@@ -3,6 +3,8 @@ import { ApiMsgEnum, EntityTypeEnum, IClientInput, IMsgClientSync, IMsgServerSyn
 import { ActorEntity } from '../Entity/Actor/ActorEntity';
 import { BulletEntity } from '../Entity/Bullet/BulletEntity';
 import { EventEnum, PrefabPathEnum, TexturePathEnum } from '../Enum';
+import FightConfig from '../Fighting/FightConfig';
+import { FrameUpdateMgr } from '../FightMgr/FrameUpdateMgr';
 import DataManager from '../Global/DataManager';
 import EventManager from '../Global/EventManager';
 import { NetworkManager } from '../Global/NetworkManager';
@@ -38,6 +40,9 @@ export class BattleManager extends Component {
         this.shouldUpdate = true;
         EventManager.Instance.on(EventEnum.ClientSync, this.handleClientSync, this);
         NetworkManager.Instance.listenMsg(ApiMsgEnum.MsgServerSync, this.handleServerSync, this);
+        FrameUpdateMgr.Instance.registerUpdate((dt: number) => {
+
+        })
     }
 
     clearGame() {
@@ -73,6 +78,7 @@ export class BattleManager extends Component {
         if (!this.shouldUpdate) {
             return;
         }
+        FrameUpdateMgr.Instance.updated(FightConfig.dt);
         this.render();
         this.tick(dt);
     }
