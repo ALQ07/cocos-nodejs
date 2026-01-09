@@ -1,5 +1,5 @@
 import { _decorator, Tween, tween, Vec3 } from 'cc';
-import { EntityManager } from '../../Base/EntityManager';
+import { Entity } from '../../Base/Entity';
 import { EntityTypeEnum, IBullet, IVec2 } from '../../Common';
 import { EntityStateEnum, EventEnum } from '../../Enum';
 import DataManager from '../../Global/DataManager';
@@ -11,7 +11,7 @@ import { BulletStateMachine } from './BulletStateMachine';
 const { ccclass, property } = _decorator;
 
 @ccclass('BulletEntity')
-export class BulletEntity extends EntityManager {
+export class BulletEntity extends Entity {
 
     type: EntityTypeEnum;
     id: number;

@@ -70,6 +70,7 @@ export default class DataManager extends Singleton {
   }
 
   applyInput(input: IClientInput) {
+    
     switch (input.type) {
       case InputTypeEnum.ActorMove: {
         const { id, type, direction, deltaTime } = input;

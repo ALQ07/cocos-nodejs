@@ -1,5 +1,5 @@
 import { _decorator, Node, UITransform, Vec2 } from 'cc';
-import { EntityManager } from '../../Base/EntityManager';
+import { Entity } from '../../Base/Entity';
 import { IActor, InputTypeEnum } from '../../Common';
 import { EntityStateEnum, EventEnum } from '../../Enum';
 import DataManager from '../../Global/DataManager';
@@ -8,7 +8,7 @@ import { WeaponStateMachine } from './WeaponStateMachine';
 const { ccclass, property } = _decorator;
 
 @ccclass('WeaponEntity')
-export class WeaponEntity extends EntityManager {
+export class WeaponEntity extends Entity {
     private body: Node = null;
     private anchor: Node = null;
     private point: Node = null;

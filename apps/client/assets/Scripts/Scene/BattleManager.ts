@@ -1,9 +1,9 @@
 import { _decorator, Component, instantiate, Node, Prefab, SpriteFrame } from 'cc';
 import { ApiMsgEnum, EntityTypeEnum, IClientInput, IMsgClientSync, IMsgServerSync, InputTypeEnum } from '../Common';
-import { ActorEntity } from '../Entity/Actor/ActorEntity';
 import { BulletEntity } from '../Entity/Bullet/BulletEntity';
 import { EventEnum, PrefabPathEnum, TexturePathEnum } from '../Enum';
 import FightConfig from '../Fighting/FightConfig';
+import { UnitFactory } from '../Fighting/UnitFactory';
 import { FrameUpdateMgr } from '../FightMgr/FrameUpdateMgr';
 import DataManager from '../Global/DataManager';
 import EventManager from '../Global/EventManager';
@@ -40,6 +40,7 @@ export class BattleManager extends Component {
         this.shouldUpdate = true;
         EventManager.Instance.on(EventEnum.ClientSync, this.handleClientSync, this);
         NetworkManager.Instance.listenMsg(ApiMsgEnum.MsgServerSync, this.handleServerSync, this);
+        this.initActor();
         FrameUpdateMgr.Instance.registerUpdate((dt: number) => {
 
         })
@@ -102,23 +103,13 @@ export class BattleManager extends Component {
     }
 
     render() {
-        this.renderActor()
+        // this.initActor()
         this.renderBullet()
     }
 
-    renderActor() {
+    initActor() {
         for (let data of DataManager.Instance.state.actors) {
-            const { id, type } = data;
-            let actorEntity = DataManager.Instance.actorMap.get(id);
-            if (!actorEntity) {
-                const prefab = DataManager.Instance.prefabMap.get(type);
-                const actorNode = instantiate(prefab);
-                actorNode.parent = this.stage;
-                actorEntity = actorNode.addComponent(ActorEntity);
-                DataManager.Instance.actorMap.set(id, actorEntity);
-                actorEntity.init(data);
-            }
-            actorEntity.render(data);
+            UnitFactory.createActor(data);
         }
     }
 

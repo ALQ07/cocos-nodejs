@@ -1,12 +1,12 @@
 import { _decorator, v3 } from 'cc';
-import { EntityManager } from '../../Base/EntityManager';
+import { Entity } from '../../Base/Entity';
 import { EntityTypeEnum, IVec2 } from '../../Common';
 import { EntityStateEnum } from '../../Enum';
 import { ExplosionStateMachine } from './ExplosionStateMachine';
 const { ccclass, property } = _decorator;
 
 @ccclass('ExplosionEntity')
-export class ExplosionEntity extends EntityManager {
+export class ExplosionEntity extends Entity {
 
     type: EntityTypeEnum;
     id: number;
